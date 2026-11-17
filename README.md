@@ -35,10 +35,14 @@
    - Bookmark critical flashcards and questions for quick reference.
    - Export custom decks as portable JSON files to share with classmates; import syllabi instantly.
 
-7. **🛡️ Role-Based Authentication & Faculty Admin Portal**
+7. **🛡️ Role-Based Access Control & Faculty Admin Portal**
    - JWT stateless authentication with passwords hashed using `bcryptjs`.
-   - Role checks (`student` and `admin`).
-   - Admin management panel to create, update, and prune curriculum subjects and question bank items.
+   - Distinct role separation (`student` vs `admin`) with zero leak of admin credentials or controls.
+   - **Faculty Admin Portal (`/admin`)**:
+     - System overview metrics and 7-day platform quiz submission activity chart.
+     - **Student Progress & Analytics (`/admin/students`)**: Live student cohort tracking, streak meters, cards studied, quiz accuracy percentages, and interactive student drill-down dossiers.
+     - **One-Click CSV Export**: Download student performance reports for grading and evaluations.
+     - **Curriculum & Question Bank Management (`/admin/subjects`, `/admin/questions`)**: CRUD operations for subjects, MCQs, answer keys, and academic explanations.
 
 ---
 

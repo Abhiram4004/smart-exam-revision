@@ -212,3 +212,43 @@ Submits quality score: `1` for Need Review, `4` for Known.
 }
 ```
 
+
+
+---
+
+### 5. Administrative Control & Student Analytics (Admin Only)
+All endpoints require `Authorization: Bearer <token>` where user has `role: "admin"`.
+
+#### Platform Stats (`GET /api/admin/stats`)
+Returns total enrolled students, total subjects, flashcards, questions, total quizzes, 7-day quiz volume, and platform-wide average score.
+
+#### Student Directory & Progress (`GET /api/admin/students`)
+Returns live progress metrics for all enrolled students (admin accounts are excluded for privacy):
+```json
+{
+  "count": 2,
+  "students": [
+    {
+      "_id": "6afbd8822d658fab59bb2099",
+      "name": "Alex Student",
+      "email": "student@smartrevision.local",
+      "createdAt": "2026-11-17T04:30:58.739Z",
+      "streak": 3,
+      "cardsReviewed": 94,
+      "quizzesTaken": 4,
+      "averageScore": 45,
+      "status": "Active",
+      "recentAttempts": [...]
+    }
+  ]
+}
+```
+
+#### Student Detailed Dossier (`GET /api/admin/students/:id`)
+Returns deep drill-down analytics for a specific student, including subject-by-subject accuracy breakdown, recent quiz attempts, and daily activity logs.
+
+#### Question Bank Management (`/api/admin/questions`)
+- `GET /api/admin/questions?subject=<id>&page=1&limit=20`: Paginated question bank retrieval.
+- `POST /api/admin/questions`: Create a new exam question with options, correctIndex, topic, difficulty, and explanation.
+- `PUT /api/admin/questions/:id`: Update question details.
+- `DELETE /api/admin/questions/:id`: Remove question and update subject question counters.
