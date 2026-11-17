@@ -32,6 +32,20 @@ app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json({ limit: '10mb' }));
 
+// Ensure database is connected for API requests (serverless & long-running)
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    try {
+      await connectDB();
+      next();
+    } catch (err) {
+      return res.status(500).json({ error: 'Database connection failed: ' + err.message });
+    }
+  } else {
+    next();
+  }
+});
+
 // Rate limiter for auth routes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -74,7 +88,7 @@ app.use(errorHandler);
 // Connect to DB and start server
 const PORT = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV !== 'test') {
+if (require.main === module && process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   connectDB().then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
