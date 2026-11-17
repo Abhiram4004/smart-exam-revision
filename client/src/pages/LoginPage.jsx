@@ -23,9 +23,14 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
-      await login(email.trim(), password);
-      toast.success('Welcome back to SmartRevise!');
-      navigate('/');
+      const data = await login(email.trim(), password);
+      if (data?.user?.role === 'admin') {
+        toast.success('Welcome to Faculty & Admin Control Portal!');
+        navigate('/admin');
+      } else {
+        toast.success('Welcome back to SmartRevise!');
+        navigate('/');
+      }
     } catch (err) {
       const msg = err.response?.data?.error || 'Failed to login. Please check credentials.';
       toast.error(msg);

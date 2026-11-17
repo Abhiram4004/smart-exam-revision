@@ -14,15 +14,23 @@ const questionValidation = [
   validate
 ];
 
-// All admin routes require auth + admin role
+// All admin routes strictly require authentication AND role: 'admin'
 router.use(auth, roleCheck(['admin']));
 
+// Analytics & Overview
 router.get('/stats', adminController.getStats);
+
+// Student Progress & Data (Excludes admin profiles to preserve admin privacy)
+router.get('/students', adminController.getStudents);
+router.get('/students/:id', adminController.getStudentById);
+
+// Question Bank Management
 router.get('/questions', adminController.getQuestions);
 router.post('/questions', questionValidation, adminController.createQuestion);
 router.put('/questions/:id', adminController.updateQuestion);
 router.delete('/questions/:id', adminController.deleteQuestion);
+
+// Legacy users route (sanitized to exclude admin profiles)
 router.get('/users', adminController.getUsers);
 
 module.exports = router;
-

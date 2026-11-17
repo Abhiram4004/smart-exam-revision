@@ -25,6 +25,7 @@ const ProgressPage = lazy(() => import('./pages/ProgressPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AdminStudentsPage = lazy(() => import('./pages/AdminStudentsPage'));
 const AdminSubjectsPage = lazy(() => import('./pages/AdminSubjectsPage'));
 const AdminQuestionsPage = lazy(() => import('./pages/AdminQuestionsPage'));
 
@@ -46,7 +47,7 @@ function AppContent() {
 
             {/* Protected Student / User Routes */}
             <Route element={<PrivateRoute />}>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={user?.role === 'admin' ? <Navigate to="/admin" replace /> : <Dashboard />} />
               <Route path="/flashcards" element={<FlashcardsPage />} />
               <Route path="/flashcards/:deckId" element={<DeckStudyPage />} />
               <Route path="/study" element={<DailyRevisionPage />} />
@@ -59,9 +60,10 @@ function AppContent() {
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
 
-            {/* Protected Admin Routes */}
+            {/* Protected Admin Routes (Only accessible by role: 'admin') */}
             <Route element={<AdminRoute />}>
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/students" element={<AdminStudentsPage />} />
               <Route path="/admin/subjects" element={<AdminSubjectsPage />} />
               <Route path="/admin/questions" element={<AdminQuestionsPage />} />
             </Route>
